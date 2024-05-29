@@ -18,6 +18,10 @@ class HttpHeaderViewer(ThemedTk):
         self.url_input = ttk.Entry(self, width=50)
         self.url_input.grid(row=0, column=1, columnspan=2, padx=5, pady=5)
 
+        # Paste Button
+        self.paste_button = ttk.Button(self, text="Paste", command=self.paste_url)
+        self.paste_button.grid(row=0, column=3, padx=5, pady=5)
+
         # Request Method Selection
         self.method_label = ttk.Label(self, text="Select Method:")
         self.method_label.grid(row=1, column=0, padx=5, pady=5, sticky="w")
@@ -33,30 +37,35 @@ class HttpHeaderViewer(ThemedTk):
 
         # Fetch Button
         self.fetch_button = ttk.Button(self, text="Fetch", command=self.fetch_headers)
-        self.fetch_button.grid(row=0, column=3, padx=5, pady=5)
+        self.fetch_button.grid(row=0, column=4, padx=5, pady=5)
 
         # Headers Frame
         self.headers_frame = tk.Frame(self)
-        self.headers_frame.grid(row=2, column=0, columnspan=4, padx=5, pady=5)
+        self.headers_frame.grid(row=2, column=0, columnspan=5, padx=5, pady=5)
 
         # Response Headers
         self.response_headers_label = ttk.Label(self, text="Response Headers:")
         self.response_headers_label.grid(row=3, column=0, padx=5, pady=5, sticky="w")
 
         self.response_headers_text = tk.Text(self, width=60, height=10)
-        self.response_headers_text.grid(row=4, column=0, columnspan=4, padx=5, pady=5)
+        self.response_headers_text.grid(row=4, column=0, columnspan=5, padx=5, pady=5)
 
         # Response Content
         self.response_content_label = ttk.Label(self, text="Response Content:")
         self.response_content_label.grid(row=5, column=0, padx=5, pady=5, sticky="w")
 
         self.response_content_text = tk.Text(self, width=60, height=10)
-        self.response_content_text.grid(row=6, column=0, columnspan=4, padx=5, pady=5)
+        self.response_content_text.grid(row=6, column=0, columnspan=5, padx=5, pady=5)
 
         # Send Button
         self.send_button = ttk.Button(self, text="Send", command=self.send_request)
-        self.send_button.grid(row=7, column=0, columnspan=4, padx=5, pady=5)
+        self.send_button.grid(row=7, column=0, columnspan=5, padx=5, pady=5)
         self.send_button.config(state=tk.DISABLED)
+
+    def paste_url(self):
+        # Function to paste URL from clipboard
+        self.url_input.delete(0, tk.END)
+        self.url_input.insert(0, self.clipboard_get())
 
     def fetch_headers(self):
         url = self.url_input.get()
@@ -119,7 +128,6 @@ class HttpHeaderViewer(ThemedTk):
             self.send_button.config(state=tk.DISABLED)
         except requests.exceptions.RequestException as e:
             messagebox.showerror('Error', f'Failed to send request: {e}')
-
 
 
 if __name__ == '__main__':
